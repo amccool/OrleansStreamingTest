@@ -60,16 +60,18 @@ namespace StreamerUnitTests
 
             var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
 
+            var feeds = new List<Task>();
             for (int i = 0; i < 500; i++)
             {
-                grain.FeedMe(new DTOData.Food()
+                feeds.Add(grain.FeedMe(new DTOData.Food()
                 {
                     name = "carrot",
                     order = i,
                     type = DTOData.FoodPyramid.Vegatable
-                });
-
+                }));
             }
+
+            Task.WhenAll(feeds).Wait();
 
 
             var expul = GrainFactory.GetGrain<IExpulsionGrain>(mouthName);
@@ -94,18 +96,18 @@ namespace StreamerUnitTests
 
             var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
 
-
-
+            var feeds = new List<Task>();
             for (int i = 0; i < 500; i++)
             {
-                grain.FeedMe(new DTOData.Food()
+                feeds.Add(grain.FeedMe(new DTOData.Food()
                 {
                     name = "carrot",
                     order = i,
                     type = DTOData.FoodPyramid.Vegatable
-                });
-
+                }));
             }
+
+            Task.WhenAll(feeds).Wait();
 
 
             var expGrain = GrainFactory.GetGrain<IExpulsionGrain>(mouthName);

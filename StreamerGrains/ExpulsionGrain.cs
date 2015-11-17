@@ -36,14 +36,14 @@ namespace StreamerGrains
         {
             IStreamProvider streamProvider = base.GetStreamProvider("SMSProvider");
 
-            IAsyncStream<Food> foodStream = streamProvider.GetStream<Food>(streamId, base.IdentityString);
+            IAsyncStream<Food> foodStream = streamProvider.GetStream<Food>(streamId, this.GetPrimaryKeyString());
 
             //var consumerObserver = new FoodObserver<Food>(this);
 
             await foodStream.SubscribeAsync(
                 (e, t) =>
                 {
-                    var tok = t.ToString();
+                    //var tok = t.ToString();
                     outputs.Add(new Waste()
                     {
                         length = e.order,

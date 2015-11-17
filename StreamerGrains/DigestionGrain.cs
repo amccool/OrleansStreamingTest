@@ -15,16 +15,16 @@ namespace StreamerGrains
         public async Task LinkToMouth(Guid streamId)
         {
 
-            var exitonly = GrainFactory.GetGrain<IExpulsionGrain>(this.IdentityString);
+            var exitonly = GrainFactory.GetGrain<IExpulsionGrain>(this.GetPrimaryKeyString());
 
             await exitonly.LinkToDigestion(streamId);
 
 
 
-        // Post data directly into device's stream.
-        IStreamProvider streamProvider = base.GetStreamProvider("SMSProvider");
+            // Post data directly into device's stream.
+            IStreamProvider streamProvider = base.GetStreamProvider("SMSProvider");
 
-            IAsyncStream<Food> foodStream = streamProvider.GetStream<Food>(streamId, base.IdentityString);
+            IAsyncStream<Food> foodStream = streamProvider.GetStream<Food>(streamId, this.GetPrimaryKeyString());
 
             var consumerObserver = new FoodObserver<Food>(this);
 

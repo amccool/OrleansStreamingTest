@@ -19,7 +19,7 @@ namespace StreamerGrains
         public async Task FeedMe(Food food)
         {
 
-            var digestivetract = GrainFactory.GetGrain<IDigestionGrain>(base.IdentityString);
+            var digestivetract = GrainFactory.GetGrain<IDigestionGrain>(this.GetPrimaryKeyString());
 
             //var strmId = new Guid("7128ABF9-D945-4DDF-8E2D-DD27EABCD902");
             var streamId = Guid.NewGuid();
@@ -31,7 +31,7 @@ namespace StreamerGrains
             // Post data directly into device's stream.
             IStreamProvider streamProvider = base.GetStreamProvider("SMSProvider");
 
-            IAsyncStream<Food> foodStream = streamProvider.GetStream<Food>(streamId, base.IdentityString);
+            IAsyncStream<Food> foodStream = streamProvider.GetStream<Food>(streamId, this.GetPrimaryKeyString());
             await foodStream.OnNextAsync(food);
         }
 
