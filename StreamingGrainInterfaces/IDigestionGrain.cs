@@ -7,14 +7,9 @@ using System.Threading.Tasks;
 
 namespace StreamingGrainInterfaces
 {
-    public interface IDigestionGrain : IGrainWithGuidKey
+    public interface IDigestionGrain : IGrainWithStringKey
     {
-        Task LinkToStomach();
-        //Task BecomeConsumer(Guid streamId, string streamNamespace, string providerToUse);
-
-        //Task StopConsuming();
-
-        //Task<int> GetNumberConsumed();
+        Task LinkToMouth(Guid streamId);
     }
 
 

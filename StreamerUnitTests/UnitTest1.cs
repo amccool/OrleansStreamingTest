@@ -32,16 +32,16 @@ namespace StreamerUnitTests
         [TestMethod]
         public void TestIngestion()
         {
-            Guid id = Guid.NewGuid();
+            var mouthName = "TestMouth";
 
-            IIngestionGrain grain = GrainFactory.GetGrain<IIngestionGrain>(id);
+            IIngestionGrain grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
 
             var fedtask  = grain.FeedMe(new DTOData.Food()
             {
                 name = "carrot",
                 order = 0,
                 type = DTOData.FoodPyramid.Vegatable
-            }, "main");
+            });
 
             fedtask.Wait();
 
@@ -54,9 +54,11 @@ namespace StreamerUnitTests
         [TestMethod]
         public void FoodStreams()
         {
-            Guid id = Guid.NewGuid();
+            var rnd = new Random();
 
-            var grain = GrainFactory.GetGrain<IIngestionGrain>(id);
+            var mouthName = "TestMouth" + rnd.Next().ToString();
+
+            var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
 
             for (int i = 0; i < 500; i++)
             {
@@ -65,51 +67,77 @@ namespace StreamerUnitTests
                     name = "carrot",
                     order = i,
                     type = DTOData.FoodPyramid.Vegatable
-                }, "main");
+                });
 
             }
 
 
-            var expul = GrainFactory.GetGrain<IExpulsionGrain>(Guid.NewGuid());
+            var expul = GrainFactory.GetGrain<IExpulsionGrain>(mouthName);
 
 
-            expul.LinkToDigestion();
+            expul.LinkToDigestion(streamId);
 
 
-            Task<IEnumerable<Waste>> taskwastes = expul.Dump();
+            Task<List<Waste>> taskwastes = expul.Dump();
 
             taskwastes.Wait();
 
             Assert.AreEqual<int>(taskwastes.Result.Count(), 500);
-
-
-
-
         }
-
 
         [TestMethod]
-        public void StreamingTests_Consumer_Producer()
+        public void TestMouthFeeding()
         {
-            // consumer joins first, producer later
-            //var consumer = GrainFactory.GetGrain<ISampleStreaming_ConsumerGrain>(Guid.NewGuid());
-            //await consumer.BecomeConsumer(streamId, StreamNamespace, streamProvider);
+            var rnd = new Random();
+
+            var mouthName = "TestMouth" + rnd.Next().ToString();
+
+            var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
 
 
 
-            //var producer = GrainFactory.GetGrain<ISampleStreaming_ProducerGrain>(Guid.NewGuid());
-            //await producer.BecomeProducer(streamId, StreamNamespace, streamProvider);
+            for (int i = 0; i < 500; i++)
+            {
+                grain.FeedMe(new DTOData.Food()
+                {
+                    name = "carrot",
+                    order = i,
+                    type = DTOData.FoodPyramid.Vegatable
+                });
 
-            //await producer.StartPeriodicProducing();
+            }
 
-            //await Task.Delay(TimeSpan.FromMilliseconds(1000));
 
-            //await producer.StopPeriodicProducing();
+            var expGrain = GrainFactory.GetGrain<IExpulsionGrain>(mouthName);
 
-            //await TestingUtils.WaitUntilAsync(lastTry => CheckCounters(producer, consumer, lastTry), _timeout);
+            Assert.AreEqual<int>(expGrain.Dump().GetAwaiter().GetResult().Count(), 500);
 
-            //await consumer.StopConsuming();
+
         }
+
+
+        //[TestMethod]
+        //public void StreamingTests_Consumer_Producer()
+        //{
+        // consumer joins first, producer later
+        //var consumer = GrainFactory.GetGrain<ISampleStreaming_ConsumerGrain>(Guid.NewGuid());
+        //await consumer.BecomeConsumer(streamId, StreamNamespace, streamProvider);
+
+
+
+        //var producer = GrainFactory.GetGrain<ISampleStreaming_ProducerGrain>(Guid.NewGuid());
+        //await producer.BecomeProducer(streamId, StreamNamespace, streamProvider);
+
+        //await producer.StartPeriodicProducing();
+
+        //await Task.Delay(TimeSpan.FromMilliseconds(1000));
+
+        //await producer.StopPeriodicProducing();
+
+        //await TestingUtils.WaitUntilAsync(lastTry => CheckCounters(producer, consumer, lastTry), _timeout);
+
+        //await consumer.StopConsuming();
+        //}
 
     }
 }

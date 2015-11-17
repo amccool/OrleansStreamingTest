@@ -1,4 +1,6 @@
-﻿using Orleans;
+﻿using DTOData;
+using Orleans;
+using Orleans.Streams;
 using StreamingGrainInterfaces;
 using System;
 using System.Collections.Generic;
@@ -10,9 +12,29 @@ namespace StreamerGrains
 {
     public class DigestionGrain : Grain, IDigestionGrain
     {
-        public Task LinkToStomach()
+        public async Task LinkToMouth(Guid streamId)
         {
-            return TaskDone.Done;
+
+            var exitonly = GrainFactory.GetGrain<IExpulsionGrain>(this.IdentityString);
+
+            await exitonly.LinkToDigestion(streamId);
+
+
+
+        // Post data directly into device's stream.
+        IStreamProvider streamProvider = base.GetStreamProvider("SMSProvider");
+
+            IAsyncStream<Food> foodStream = streamProvider.GetStream<Food>(streamId, base.IdentityString);
+
+            var consumerObserver = new FoodObserver<Food>(this);
+
+            var consumerHandle = await foodStream.SubscribeAsync(
+                (f, t) =>
+                {
+                    base.GetLogger().Info("{0}{1}", f, t);
+                    return TaskDone.Done;
+                });
         }
+
     }
 }

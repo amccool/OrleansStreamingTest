@@ -8,11 +8,11 @@ using System.Threading.Tasks;
 
 namespace StreamingGrainInterfaces
 {
-    public interface IExpulsionGrain : IGrainWithGuidKey
+    public interface IExpulsionGrain : IGrainWithStringKey
     {
-        Task LinkToDigestion();
+        Task LinkToDigestion(Guid streamId);
 
-        Task<IEnumerable<Waste>> Dump();
+        Task<List<Waste>> Dump();
     }
 
 

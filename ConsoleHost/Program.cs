@@ -20,29 +20,12 @@ namespace ConsoleHost
                     AppDomainInitializer = InitSilo
                 });
 
-
-            //DoSomeClientWork();
-
             Console.WriteLine("Orleans Silo is running.\nPress Enter to terminate...");
             Console.ReadLine();
 
             // We do a clean shutdown in the other AppDomain
             hostDomain.DoCallBack(ShutdownSilo);
         }
-
-        //static void DoSomeClientWork()
-        //{
-        //    // Orleans comes with a rich XML configuration but we're just going to setup a basic config
-        //    var clientconfig = new Orleans.Runtime.Configuration.ClientConfiguration();
-        //    clientconfig.Gateways.Add(new IPEndPoint(IPAddress.Loopback, 30000));
-
-        //    GrainClient.Initialize(clientconfig);
-
-        //    var friend = GrainClient.GrainFactory.GetGrain<IHello>(0);
-        //    var result = friend.SayHello("Goodbye").Result;
-        //    Console.WriteLine(result);
-
-        //}
 
         static void InitSilo(string[] args)
         {

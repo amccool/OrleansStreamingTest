@@ -18,10 +18,6 @@ namespace Ingestion
 
 
             policy.Execute(() => InitUs());
-
-
-
-
         }
         static void InitUs()
         {

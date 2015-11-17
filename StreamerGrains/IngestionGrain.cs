@@ -7,27 +7,37 @@ using System.Text;
 using System.Threading.Tasks;
 using DTOData;
 using Orleans.Streams;
+using Orleans.Providers;
 
 namespace StreamerGrains
 {
-    public class IngestionGrain : Grain, IIngestionGrain
+    [StorageProvider(ProviderName="guts")]
+    public class IngestionGrain : Grain<GutState>, IIngestionGrain
     {
-        public async Task FeedMe(Food food, string mouth)
+        private Guid strmId;
+
+        public async Task FeedMe(Food food)
         {
 
-            base.GetGrain<IDigestionGrain>(mouth);
+            var digestivetract = GrainFactory.GetGrain<IDigestionGrain>(base.IdentityString);
+
+            //var strmId = new Guid("7128ABF9-D945-4DDF-8E2D-DD27EABCD902");
+            var streamId = Guid.NewGuid();
+
+            await digestivetract.LinkToMouth(streamId);
 
 
-
-
-            var strmId = new Guid("7128ABF9-D945-4DDF-8E2D-DD27EABCD902");
 
             // Post data directly into device's stream.
             IStreamProvider streamProvider = base.GetStreamProvider("SMSProvider");
 
-            IAsyncStream<Food> foodStream = streamProvider.GetStream<Food>(strmId, mouth);
+            IAsyncStream<Food> foodStream = streamProvider.GetStream<Food>(streamId, base.IdentityString);
             await foodStream.OnNextAsync(food);
         }
 
+        public Task<Guid> GetFoodRoute()
+        {
+            return Task.FromResult(strmId);
+        }
     }
 }

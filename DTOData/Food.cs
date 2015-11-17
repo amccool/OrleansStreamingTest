@@ -14,6 +14,7 @@ namespace DTOData
         public int order;
     }
 
+    [Serializable]
     public enum FoodPyramid
     {
         Meat,

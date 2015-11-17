@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 
 namespace StreamingGrainInterfaces
 {
-    public interface IIngestionGrain : IGrainWithGuidKey
+    public interface IIngestionGrain : IGrainWithStringKey
     {
+        Task FeedMe(Food food);
 
-        Task FeedMe(Food food, string mouth);
+        Task<Guid> GetFoodRoute();
 
 
 
