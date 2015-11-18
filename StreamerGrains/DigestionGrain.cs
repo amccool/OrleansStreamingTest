@@ -26,7 +26,7 @@ namespace StreamerGrains
 
             IAsyncStream<Food> foodStream = streamProvider.GetStream<Food>(streamId, this.GetPrimaryKeyString());
 
-            var consumerObserver = new FoodObserver<Food>(this);
+            //var consumerObserver = new FoodObserver<Food>(this);
 
             var consumerHandle = await foodStream.SubscribeAsync(
                 (f, t) =>

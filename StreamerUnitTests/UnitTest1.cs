@@ -21,7 +21,7 @@ namespace StreamerUnitTests
     public class UnitTest1 : TestingSiloHost
     {
         private const string strmProvName = "SMSProvider";
-        private const int numToLoop = 50;
+        private const int numToLoop = 70;
         private readonly Guid streamId = Guid.NewGuid(); 
 
         public UnitTest1()
