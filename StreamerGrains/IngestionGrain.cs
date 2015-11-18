@@ -18,26 +18,29 @@ namespace StreamerGrains
 
         public async Task FeedMe(Food food)
         {
-
+            // Post data directly into device's stream.
+            IStreamProvider streamProvider = base.GetStreamProvider("SMSProvider");
             var digestivetract = GrainFactory.GetGrain<IDigestionGrain>(this.GetPrimaryKeyString());
 
             //var strmId = new Guid("7128ABF9-D945-4DDF-8E2D-DD27EABCD902");
-            var streamId = Guid.NewGuid();
-
-            await digestivetract.LinkToMouth(streamId);
+            //var streamId = Guid.NewGuid();
 
 
 
-            // Post data directly into device's stream.
-            IStreamProvider streamProvider = base.GetStreamProvider("SMSProvider");
+            if(this.strmId.Equals(Guid.Empty))
+            {
+                throw new Exception("gggggggggggggggggggggggggggggggggggggggggggggg");
+            }
+            await digestivetract.LinkToMouth(this.strmId);
+            IAsyncStream<Food> foodStream = streamProvider.GetStream<Food>(this.strmId, this.GetPrimaryKeyString());
 
-            IAsyncStream<Food> foodStream = streamProvider.GetStream<Food>(streamId, this.GetPrimaryKeyString());
             await foodStream.OnNextAsync(food);
         }
 
-        public Task<Guid> GetFoodRoute()
+        public Task<Guid> PrepareFoodRoute()
         {
-            return Task.FromResult(strmId);
+            this.strmId = Guid.NewGuid();
+            return Task.FromResult(this.strmId);
         }
     }
 }

@@ -6,6 +6,10 @@ using StreamingGrainInterfaces;
 using DTOData;
 using System.Collections.Generic;
 using System.Linq;
+using Orleans.Streams;
+using Orleans;
+using System.Diagnostics;
+using System.IO;
 
 namespace StreamerUnitTests
 {
@@ -16,8 +20,24 @@ namespace StreamerUnitTests
     [TestClass]
     public class UnitTest1 : TestingSiloHost
     {
-            private readonly Guid streamId = Guid.NewGuid(); 
-            private readonly string streamProvider = "xxx";
+        private const string strmProvName = "SMSProvider";
+        private const int numToLoop = 50;
+        private readonly Guid streamId = Guid.NewGuid(); 
+
+        public UnitTest1()
+            : base(new TestingSiloOptions
+            {
+                StartFreshOrleans = true,
+                SiloConfigFile = new FileInfo("OrleansConfigurationForTesting.xml"),
+            },
+            new TestingClientOptions()
+            {
+                ClientConfigFile = new FileInfo("ClientConfigurationForTesting.xml")
+            })
+        {
+        }
+
+
 
         [ClassCleanup]
         public static void ClassCleanup()
@@ -35,6 +55,7 @@ namespace StreamerUnitTests
             var mouthName = "TestMouth";
 
             IIngestionGrain grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
+            grain.PrepareFoodRoute().Wait();
 
             var fedtask  = grain.FeedMe(new DTOData.Food()
             {
@@ -59,9 +80,10 @@ namespace StreamerUnitTests
             var mouthName = "TestMouth" + rnd.Next().ToString();
 
             var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
+            grain.PrepareFoodRoute().Wait();
 
             var feeds = new List<Task>();
-            for (int i = 0; i < 500; i++)
+            for (int i = 0; i < numToLoop; i++)
             {
                 feeds.Add(grain.FeedMe(new DTOData.Food()
                 {
@@ -84,7 +106,7 @@ namespace StreamerUnitTests
 
             taskwastes.Wait();
 
-            Assert.AreEqual<int>(taskwastes.Result.Count(), 500);
+            Assert.AreEqual<int>(numToLoop, taskwastes.Result.Count());
         }
 
         [TestMethod]
@@ -95,9 +117,10 @@ namespace StreamerUnitTests
             var mouthName = "TestMouth" + rnd.Next().ToString();
 
             var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
+            grain.PrepareFoodRoute().Wait();
 
             var feeds = new List<Task>();
-            for (int i = 0; i < 500; i++)
+            for (int i = 0; i < numToLoop; i++)
             {
                 feeds.Add(grain.FeedMe(new DTOData.Food()
                 {
@@ -112,10 +135,85 @@ namespace StreamerUnitTests
 
             var expGrain = GrainFactory.GetGrain<IExpulsionGrain>(mouthName);
 
-            Assert.AreEqual<int>(expGrain.Dump().GetAwaiter().GetResult().Count(), 500);
+            Assert.AreEqual<int>(numToLoop, expGrain.Dump().GetAwaiter().GetResult().Count());
+        }
 
+
+        [TestMethod]
+        public void TestClientGrainConnection()
+        {
+            var streamProvs = Orleans.GrainClient.GetStreamProviders();
+
+            Assert.AreEqual<int>(1, streamProvs.Count());
+        }
+
+
+        [TestMethod]
+        public void TestClientStreamHookup()
+        {
+            StreamSequenceToken tok;
+            IStreamProvider clientSMSProv = Orleans.GrainClient.GetStreamProvider(strmProvName);
+
+            var rnd = new Random();
+            var mouthName = "TestMouth" + rnd.Next().ToString();
+
+            var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
+            var strmId = grain.PrepareFoodRoute();
+            strmId.Wait();
+
+            var foodstream = clientSMSProv.GetStream<Food>(strmId.Result, mouthName);
+
+            List<Food> foods = new List<Food>();
+            var subHandle = foodstream.SubscribeAsync(
+                (a,b) =>
+            {
+                foods.Add(a);
+                tok = b;
+                return TaskDone.Done;
+            });
+
+            var feeds = new List<Task>();
+            for (int i = 0; i < numToLoop; i++)
+            {
+                feeds.Add(grain.FeedMe(new Food()
+                {
+                    name = "carrot",
+                    order = i,
+                    type = FoodPyramid.Vegatable
+                }));
+            }
+
+
+            subHandle.Wait();
+            Task.WhenAll(feeds).Wait();
+
+            Assert.AreEqual<int>(numToLoop, foods.Count());
 
         }
+
+        [TestMethod]
+        public void GenerateFoods()
+        {
+            var rnd = new Random();
+            var mouthName = "TestMouth" + rnd.Next().ToString();
+            var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
+            grain.PrepareFoodRoute().Wait();
+            var looper = Enumerable.Range(0, numToLoop);
+
+            IEnumerable<Task> foodTasksQuery =
+    from x in looper
+    select grain.FeedMe(new Food()
+    {
+        name = "carrot",
+        order = x,
+        type = FoodPyramid.Vegatable
+    });
+
+            // Use ToArray to execute the query and start the download tasks.
+            Task[] foodTasks = foodTasksQuery.ToArray();
+            Task.WhenAll(foodTasks).Wait();
+        }
+
 
 
         //[TestMethod]
