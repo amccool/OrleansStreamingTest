@@ -12,7 +12,7 @@ namespace StreamingGrainInterfaces
     {
         Task FeedMe(Food food);
 
-        Task<Guid> PrepareFoodRoute();
+        Task PrepareFoodRoute(Guid streamId);
 
 
 

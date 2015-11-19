@@ -13,6 +13,7 @@ namespace StreamerGrains
     public class ExpulsionGrain : Grain, IExpulsionGrain
     {
         private readonly List<Waste> outputs = new List<Waste>();
+
         public Task<List<Waste>> Dump()
         {
             //    var ww = Enumerable.Repeat(new Waste()
@@ -37,8 +38,6 @@ namespace StreamerGrains
             IStreamProvider streamProvider = base.GetStreamProvider("SMSProvider");
 
             IAsyncStream<Food> foodStream = streamProvider.GetStream<Food>(streamId, this.GetPrimaryKeyString());
-
-            //var consumerObserver = new FoodObserver<Food>(this);
 
             await foodStream.SubscribeAsync(
                 (e, t) =>

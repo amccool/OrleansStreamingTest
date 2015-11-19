@@ -50,12 +50,12 @@ namespace StreamerUnitTests
 
 
         [TestMethod]
-        public void TestIngestion()
+        public void SingleIngestionTest()
         {
             var mouthName = "TestMouth";
 
             IIngestionGrain grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
-            grain.PrepareFoodRoute().Wait();
+            grain.PrepareFoodRoute(Guid.NewGuid()).Wait();
 
             var fedtask  = grain.FeedMe(new DTOData.Food()
             {
@@ -73,14 +73,13 @@ namespace StreamerUnitTests
         }
 
         [TestMethod]
-        public void FoodStreams()
+        public void GrainToGrainStreamCountTest()
         {
             var rnd = new Random();
-
             var mouthName = "TestMouth" + rnd.Next().ToString();
 
             var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
-            grain.PrepareFoodRoute().Wait();
+            grain.PrepareFoodRoute(Guid.NewGuid()).Wait();
 
             var feeds = new List<Task>();
             for (int i = 0; i < numToLoop; i++)
@@ -93,31 +92,28 @@ namespace StreamerUnitTests
                 }));
             }
 
-            Task.WhenAll(feeds).Wait();
-
-
             var expul = GrainFactory.GetGrain<IExpulsionGrain>(mouthName);
-
-
-            expul.LinkToDigestion(streamId);
-
-
             Task<List<Waste>> taskwastes = expul.Dump();
-
+            Task.WhenAll(feeds).Wait();
             taskwastes.Wait();
 
             Assert.AreEqual<int>(numToLoop, taskwastes.Result.Count());
         }
 
+
+
         [TestMethod]
-        public void TestMouthFeeding()
+        public void GrainToGrainStreamCountAwaiterTest()
         {
             var rnd = new Random();
-
             var mouthName = "TestMouth" + rnd.Next().ToString();
 
             var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
-            grain.PrepareFoodRoute().Wait();
+            grain.PrepareFoodRoute(Guid.NewGuid()).Wait();
+
+            var expGrain = GrainFactory.GetGrain<IExpulsionGrain>(mouthName);
+
+            var dumpTask = expGrain.Dump();
 
             var feeds = new List<Task>();
             for (int i = 0; i < numToLoop; i++)
@@ -132,15 +128,12 @@ namespace StreamerUnitTests
 
             Task.WhenAll(feeds).Wait();
 
-
-            var expGrain = GrainFactory.GetGrain<IExpulsionGrain>(mouthName);
-
-            Assert.AreEqual<int>(numToLoop, expGrain.Dump().GetAwaiter().GetResult().Count());
+            Assert.AreEqual<int>(numToLoop, dumpTask.GetAwaiter().GetResult().Count());
         }
 
 
         [TestMethod]
-        public void TestClientGrainConnection()
+        public void ClientGrainStreamProviderConfiguationTest()
         {
             var streamProvs = Orleans.GrainClient.GetStreamProviders();
 
@@ -149,7 +142,7 @@ namespace StreamerUnitTests
 
 
         [TestMethod]
-        public void TestClientStreamHookup()
+        public void ClientStreamFromGrainTest()
         {
             StreamSequenceToken tok;
             IStreamProvider clientSMSProv = Orleans.GrainClient.GetStreamProvider(strmProvName);
@@ -158,12 +151,12 @@ namespace StreamerUnitTests
             var mouthName = "TestMouth" + rnd.Next().ToString();
 
             var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
-            var strmId = grain.PrepareFoodRoute();
-            strmId.Wait();
+            var strmId = Guid.NewGuid();
+            grain.PrepareFoodRoute(strmId).Wait();
 
-            var foodstream = clientSMSProv.GetStream<Food>(strmId.Result, mouthName);
+            var foodstream = clientSMSProv.GetStream<Food>(strmId, mouthName);
 
-            List<Food> foods = new List<Food>();
+            var foods = new List<Food>();
             var subHandle = foodstream.SubscribeAsync(
                 (a,b) =>
             {
@@ -192,12 +185,12 @@ namespace StreamerUnitTests
         }
 
         [TestMethod]
-        public void GenerateFoods()
+        public void EnumerableGenerateFoodsTest()
         {
             var rnd = new Random();
             var mouthName = "TestMouth" + rnd.Next().ToString();
             var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
-            grain.PrepareFoodRoute().Wait();
+            grain.PrepareFoodRoute(Guid.NewGuid()).Wait();
             var looper = Enumerable.Range(0, numToLoop);
 
             IEnumerable<Task> foodTasksQuery =

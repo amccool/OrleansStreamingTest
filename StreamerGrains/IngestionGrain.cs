@@ -20,27 +20,30 @@ namespace StreamerGrains
         {
             // Post data directly into device's stream.
             IStreamProvider streamProvider = base.GetStreamProvider("SMSProvider");
-            var digestivetract = GrainFactory.GetGrain<IDigestionGrain>(this.GetPrimaryKeyString());
-
-            //var strmId = new Guid("7128ABF9-D945-4DDF-8E2D-DD27EABCD902");
-            //var streamId = Guid.NewGuid();
-
 
 
             if(this.strmId.Equals(Guid.Empty))
             {
                 throw new Exception("gggggggggggggggggggggggggggggggggggggggggggggg");
             }
-            await digestivetract.LinkToMouth(this.strmId);
             IAsyncStream<Food> foodStream = streamProvider.GetStream<Food>(this.strmId, this.GetPrimaryKeyString());
 
-            await foodStream.OnNextAsync(food);
+             var digestivetract = GrainFactory.GetGrain<IDigestionGrain>(this.GetPrimaryKeyString());
+            await digestivetract.LinkToMouth(this.strmId);
+
+
+
+
+
+           await foodStream.OnNextAsync(food);
+            //foodStream.OnErrorAsync(new Exception());
+            await foodStream.OnCompletedAsync();
         }
 
-        public Task<Guid> PrepareFoodRoute()
+        public Task PrepareFoodRoute(Guid streamId)
         {
-            this.strmId = Guid.NewGuid();
-            return Task.FromResult(this.strmId);
+            this.strmId = streamId;
+            return TaskDone.Done;
         }
     }
 }
