@@ -57,8 +57,8 @@
       <HintPath>..\packages\Microsoft.Orleans.OrleansProviders.1.1.2\lib\net451\OrleansProviders.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Polly, Version=2.2.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Polly.2.2.3\lib\net45\Polly.dll</HintPath>
+    <Reference Include="Polly, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Polly.3.0.0\lib\net45\Polly.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
