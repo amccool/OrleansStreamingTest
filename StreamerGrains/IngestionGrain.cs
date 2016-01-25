@@ -16,6 +16,15 @@ namespace StreamerGrains
     {
         private Guid strmId;
 
+        public override Task OnActivateAsync()
+        {
+            this.ReadStateAsync();
+
+            return base.OnActivateAsync();
+        }
+
+
+
         public async Task FeedMe(Food food)
         {
             // Post data directly into device's stream.
@@ -43,7 +52,15 @@ namespace StreamerGrains
         public Task PrepareFoodRoute(Guid streamId)
         {
             this.strmId = streamId;
+            this.WriteStateAsync().Wait();
+
             return TaskDone.Done;
         }
     }
+
+
+
+
+
+
 }

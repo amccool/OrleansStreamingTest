@@ -64,8 +64,8 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="OrleansSQLUtils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Orleans.OrleansSqlUtils.1.1.2\lib\net451\OrleansSQLUtils.dll</HintPath>
-      <Private>True</Private>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\orleans\src\OrleansSQLUtils\bin\Debug\OrleansSQLUtils.dll</HintPath>
     </Reference>
     <Reference Include="OrleansTestingHost, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Orleans.TestingHost.1.1.2\lib\net451\OrleansTestingHost.dll</HintPath>
@@ -109,6 +109,10 @@
     <ProjectReference Include="..\DTOData\DTOData.csproj">
       <Project>{c758e96a-b948-4aa6-bbe8-f956b2e46b27}</Project>
       <Name>DTOData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PubSubStoreSQLStorageProvider\PubSubStoreSQLStorageProvider.csproj">
+      <Project>{8ea3fd85-9095-40c4-953e-6b19bfe376b2}</Project>
+      <Name>PubSubStoreSQLStorageProvider</Name>
     </ProjectReference>
     <ProjectReference Include="..\StreamerGrains\StreamerGrains.csproj">
       <Project>{037e6484-2f77-4d55-a60c-1fe7d6da3b05}</Project>

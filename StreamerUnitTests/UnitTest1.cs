@@ -17,6 +17,13 @@ namespace StreamerUnitTests
     [DeploymentItem("ClientConfigurationForTesting.xml")]
     [DeploymentItem("StreamerGrains.dll")]
     [DeploymentItem("OrleansProviders.dll")]
+    [DeploymentItem("PubSubStoreSQLStorageProvider.dll")]
+
+    //all the supporting assemblies
+    [DeploymentItem("Microsoft.Azure.SqlDatabase.ElasticScale.Client.dll")]
+
+
+
     [TestClass]
     public class UnitTest1 : TestingSiloHost
     {
@@ -136,6 +143,10 @@ namespace StreamerUnitTests
         public void ClientGrainStreamProviderConfiguationTest()
         {
             var streamProvs = Orleans.GrainClient.GetStreamProviders();
+
+            var strprov = Orleans.GrainClient.GetStreamProvider("SMSProvider");
+            var strm = strprov.GetStream<int>(Guid.Parse("ffffffffffffffffffff"), "topic");
+
 
             Assert.AreEqual<int>(1, streamProvs.Count());
         }
