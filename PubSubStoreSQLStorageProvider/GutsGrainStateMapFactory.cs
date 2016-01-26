@@ -1,17 +1,16 @@
-﻿using Newtonsoft.Json;
-using Orleans.SqlUtils.StorageProvider;
-using StreamerGrains;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Orleans.SqlUtils.StorageProvider;
+using StreamerGrains;
 
 namespace PubSubStoreSQLStorageProvider
 {
-    public class GutsGrainStateMapFactory : IGrainStateMapFactory
-
+    /// <summary>
+    /// Sample grains' state map. Potential for improvement and usage of auto mapping libraries
+    /// </summary>
+    internal class GutsGrainStateMapFactory : IGrainStateMapFactory
     {
         public GrainStateMap CreateGrainStateMap()
         {
