@@ -35,31 +35,47 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Framework.DependencyInjection, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8f9ca67b24f6110b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Orleans.OrleansRuntime.1.0.10.26\lib\net45\Microsoft.Framework.DependencyInjection.dll</HintPath>
+    <Reference Include="Microsoft.Azure.SqlDatabase.ElasticScale.Client, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.SqlDatabase.ElasticScale.Client.1.2.0\lib\net45\Microsoft.Azure.SqlDatabase.ElasticScale.Client.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Microsoft.Framework.DependencyInjection.Abstractions, Version=1.0.0.0, Culture=neutral, PublicKeyToken=8f9ca67b24f6110b, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Orleans.OrleansRuntime.1.0.10.26\lib\net45\Microsoft.Framework.DependencyInjection.Abstractions.dll</HintPath>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling, Version=6.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\EnterpriseLibrary.TransientFaultHandling.6.0.1304.0\lib\portable-net45+win+wp8\Microsoft.Practices.EnterpriseLibrary.TransientFaultHandling.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Orleans, Version=1.0.10.26, Culture=neutral, PublicKeyToken=070f47935e3ed133, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Orleans.Core.1.0.10.26\lib\net45\Orleans.dll</HintPath>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OrleansProviders, Version=1.0.10.26, Culture=neutral, PublicKeyToken=070f47935e3ed133, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Orleans.OrleansProviders.1.0.10.26\lib\net45\OrleansProviders.dll</HintPath>
+    <Reference Include="Orleans, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Orleans.Core.1.1.2\lib\net451\Orleans.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OrleansRuntime, Version=1.0.10.26, Culture=neutral, PublicKeyToken=070f47935e3ed133, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Orleans.OrleansRuntime.1.0.10.26\lib\net45\OrleansRuntime.dll</HintPath>
+    <Reference Include="OrleansDependencyInjection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Orleans.OrleansRuntime.1.1.2\lib\net451\OrleansDependencyInjection.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OrleansTestingHost, Version=1.0.10.26, Culture=neutral, PublicKeyToken=070f47935e3ed133, processorArchitecture=MSIL">
-      <HintPath>..\packages\Microsoft.Orleans.TestingHost.1.0.10.26\lib\net45\OrleansTestingHost.dll</HintPath>
+    <Reference Include="OrleansProviders, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Orleans.OrleansProviders.1.1.2\lib\net451\OrleansProviders.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OrleansRuntime, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Orleans.OrleansRuntime.1.1.2\lib\net451\OrleansRuntime.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="OrleansSQLUtils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\orleans\src\OrleansSQLUtils\bin\Debug\OrleansSQLUtils.dll</HintPath>
+    </Reference>
+    <Reference Include="OrleansTestingHost, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Orleans.TestingHost.1.1.2\lib\net451\OrleansTestingHost.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Threading.Tasks.Dataflow, Version=4.5.24.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Tpl.Dataflow.4.5.24\lib\portable-net45+win8+wpa81\System.Threading.Tasks.Dataflow.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -78,20 +94,25 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="ClientConfigurationForTesting.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="OrleansConfigurationForTesting.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DTOData\DTOData.csproj">
       <Project>{c758e96a-b948-4aa6-bbe8-f956b2e46b27}</Project>
       <Name>DTOData</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PubSubStoreSQLStorageProvider\PubSubStoreSQLStorageProvider.csproj">
+      <Project>{8ea3fd85-9095-40c4-953e-6b19bfe376b2}</Project>
+      <Name>PubSubStoreSQLStorageProvider</Name>
     </ProjectReference>
     <ProjectReference Include="..\StreamerGrains\StreamerGrains.csproj">
       <Project>{037e6484-2f77-4d55-a60c-1fe7d6da3b05}</Project>

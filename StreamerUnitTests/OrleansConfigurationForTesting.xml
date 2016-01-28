@@ -4,20 +4,29 @@
     <StorageProviders>
       <Provider Type="Orleans.Storage.MemoryStorage" Name="MemoryStore" />
       <Provider Type="Orleans.Storage.MemoryStorage" Name="Default" />
+      <Provider Type="Orleans.Storage.MemoryStorage" Name="PubSubStore" NumStorageGrains="1"/>
+      <!--<Provider Type="Orleans.Storage.AzureTableStorage" Name="AzureStore" />-->
+      
+      <!-- ConnectionString = "Server=.;Database=guts;User ID=guts;password=guts;"-->
+
+      <Provider Type="Orleans.SqlUtils.StorageProvider.SqlStorageProvider" Name="guts"
+                            ConnectionString = "Server=.;Initial catalog=guts;Integrated Security=SSPI;"
+            MapName="guts"
+            ShardCredentials="xxxxxxxxxxxxxxx"
+             StateMapFactoryType="PubSubStoreSQLStorageProvider.GutsGrainStateMapFactory, PubSubStoreSQLStorageProvider"
+
+                />
 
       
-      <Provider Type="Orleans.Storage.MemoryStorage" Name="PubSubStore" />
-      <Provider Type="Orleans.Storage.MemoryStorage" Name="guts" />
-      <!--<Provider Type="Orleans.Storage.AzureTableStorage" Name="AzureStore" />-->
+
+
     </StorageProviders>
 
     <StreamProviders>
       <Provider Type="Orleans.Providers.Streams.SimpleMessageStream.SimpleMessageStreamProvider" 
                 Name="SMSProvider" 
                 FireAndForgetDelivery="false"/>
-      <!--<Provider Type="Orleans.Providers.Streams.AzureQueue.AzureQueueStreamProvider" Name="AzureQueueProvider"/>-->
     </StreamProviders>
-
 
     <SeedNode Address="localhost" Port="22222"/>
     <Messaging ResponseTimeout="30s"/>
@@ -25,7 +34,8 @@
   <Defaults>
     <Networking Address="localhost" Port="22222"/>
     <ProxyingGateway Address="localhost" Port="40000" />
-    <Tracing DefaultTraceLevel="Info" TraceToConsole="true" TraceToFile="false" PropagateActivityId="false" BulkMessageLimit="1000">
+    
+    <Tracing DefaultTraceLevel="Verbose3" TraceToConsole="true" TraceToFile="{0}-{1}.log" PropagateActivityId="false" BulkMessageLimit="1000">
        <TraceLevelOverride LogPrefix="Application" TraceLevel="Info" />
        <!--
        <TraceLevelOverride LogPrefix="Runtime.Dispatcher" TraceLevel="Verbose" />
