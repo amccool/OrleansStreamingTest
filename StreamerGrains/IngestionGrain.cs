@@ -16,12 +16,12 @@ namespace StreamerGrains
     {
         private Guid strmId;
 
-        public override Task OnActivateAsync()
-        {
-            this.ReadStateAsync();
+        //public override Task OnActivateAsync()
+        //{
+        //    this.ReadStateAsync();
 
-            return base.OnActivateAsync();
-        }
+        //    return base.OnActivateAsync();
+        //}
 
 
 
@@ -52,6 +52,7 @@ namespace StreamerGrains
         public Task PrepareFoodRoute(Guid streamId)
         {
             this.strmId = streamId;
+            this.State.StreamId = streamId;
             this.WriteStateAsync().Wait();
 
             return TaskDone.Done;

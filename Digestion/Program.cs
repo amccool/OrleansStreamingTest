@@ -11,38 +11,19 @@ namespace Digestion
     {
         static void Main(string[] args)
         {
-            for (int i = 0; i < 10000; i++)
-            {
-                try
-                {
-                    Orleans.GrainClient.Initialize();
-                }
-                catch (Exception ex)
-                {
-                    Orleans.GrainClient.Uninitialize();
-                    //throw;
-                }
-            }
+            //for (int i = 0; i < 10000; i++)
+            //{
+            //    try
+            //    {
+            //        Orleans.GrainClient.Initialize();
+            //    }
+            //    catch (Exception ex)
+            //    {
+            //        Orleans.GrainClient.Uninitialize();
+            //        //throw;
+            //    }
+            //}
         
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
