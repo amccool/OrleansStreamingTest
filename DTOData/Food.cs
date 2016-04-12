@@ -9,7 +9,7 @@ namespace DTOData
     [Serializable]
     public class Food
     {
-        public FoodPyramid type;
+        //public FoodPyramid type;
         public string name;
         public int order;
     }

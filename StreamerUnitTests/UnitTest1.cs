@@ -18,6 +18,8 @@ namespace StreamerUnitTests
     [DeploymentItem("StreamerGrains.dll")]
     [DeploymentItem("OrleansProviders.dll")]
     [DeploymentItem("PubSubStoreSQLStorageProvider.dll")]
+    //this fixed the "deserializer" problem
+    [DeploymentItem("DTOData.dll")]
 
     //all the supporting assemblies
     [DeploymentItem("Microsoft.Azure.SqlDatabase.ElasticScale.Client.dll")]
@@ -68,7 +70,7 @@ namespace StreamerUnitTests
             {
                 name = "carrot",
                 order = 0,
-                type = DTOData.FoodPyramid.Vegatable
+                //type = DTOData.FoodPyramid.Vegatable
             });
 
             fedtask.Wait();
@@ -95,7 +97,7 @@ namespace StreamerUnitTests
                 {
                     name = "carrot",
                     order = i,
-                    type = DTOData.FoodPyramid.Vegatable
+                    //type = DTOData.FoodPyramid.Vegatable
                 }));
             }
 
@@ -129,7 +131,7 @@ namespace StreamerUnitTests
                 {
                     name = "carrot",
                     order = i,
-                    type = DTOData.FoodPyramid.Vegatable
+                    //type = DTOData.FoodPyramid.Vegatable
                 }));
             }
 
@@ -139,17 +141,17 @@ namespace StreamerUnitTests
         }
 
 
-        [TestMethod]
-        public void ClientGrainStreamProviderConfiguationTest()
-        {
-            var streamProvs = Orleans.GrainClient.GetStreamProviders();
+        //[TestMethod]
+        //public void ClientGrainStreamProviderConfiguationTest()
+        //{
+        //    var streamProvs = Orleans.GrainClient.GetStreamProviders();
 
-            var strprov = Orleans.GrainClient.GetStreamProvider("SMSProvider");
-            var strm = strprov.GetStream<int>(Guid.Parse("ffffffffffffffffffff"), "topic");
+        //    var strprov = Orleans.GrainClient.GetStreamProvider("SMSProvider");
+        //    var strm = strprov.GetStream<int>(Guid.Parse("ffffffffffffffffffff"), "topic");
 
 
-            Assert.AreEqual<int>(1, streamProvs.Count());
-        }
+        //    Assert.AreEqual<int>(1, streamProvs.Count());
+        //}
 
 
         [TestMethod]
@@ -183,7 +185,7 @@ namespace StreamerUnitTests
                 {
                     name = "carrot",
                     order = i,
-                    type = FoodPyramid.Vegatable
+                    //type = FoodPyramid.Vegatable
                 }));
             }
 
@@ -210,7 +212,7 @@ namespace StreamerUnitTests
     {
         name = "carrot",
         order = x,
-        type = FoodPyramid.Vegatable
+        //type = FoodPyramid.Vegatable
     });
 
             // Use ToArray to execute the query and start the download tasks.
@@ -295,7 +297,13 @@ namespace StreamerUnitTests
                 });
 
 
+            foodstream.OnNextAsync(new Food { name = "c", order = 1,
+                //type = FoodPyramid.Dairy 
+            }).Wait();
 
+            substancestream.OnNextAsync(new Substance { vitamins = new List<Vitamin>() }).Wait();
+
+            wastestream.OnNextAsync(new Waste { length = 1, numPoops = 1, width = 1 }).Wait();
 
 
 
