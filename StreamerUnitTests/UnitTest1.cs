@@ -243,5 +243,63 @@ namespace StreamerUnitTests
         //await consumer.StopConsuming();
         //}
 
+
+        [TestMethod]
+        public void DifferentTypesInAStreamTest()
+        {
+            StreamSequenceToken tok;
+            IStreamProvider clientSMSProv = Orleans.GrainClient.GetStreamProvider(strmProvName);
+
+            var strmId = Guid.NewGuid();
+
+            var foodstream = clientSMSProv.GetStream<Food>(strmId, "Food");
+            var substancestream = clientSMSProv.GetStream<Substance>(strmId, "Substance");
+            var wastestream = clientSMSProv.GetStream<Waste>(strmId, "Waste");
+            var vitaminstream = clientSMSProv.GetStream<Vitamin>(strmId, "Vitamin");
+
+            var foods = new List<Food>();
+            var foodHandle = foodstream.SubscribeAsync(
+                (a, b) =>
+                {
+                    foods.Add(a);
+                    tok = b;
+                    return TaskDone.Done;
+                });
+
+            var substances = new List<Substance>();
+            var subHandle = substancestream.SubscribeAsync(
+                (a, b) =>
+                {
+                    substances.Add(a);
+                    tok = b;
+                    return TaskDone.Done;
+                });
+
+
+            var wastes = new List<Waste>();
+            var wasteHandle = wastestream.SubscribeAsync(
+                (a, b) =>
+                {
+                    wastes.Add(a);
+                    tok = b;
+                    return TaskDone.Done;
+                });
+
+            var vitamins = new List<Vitamin>();
+            var vitaminHandle = vitaminstream.SubscribeAsync(
+                (a, b) =>
+                {
+                    vitamins.Add(a);
+                    tok = b;
+                    return TaskDone.Done;
+                });
+
+
+
+
+
+
+        }
+
     }
 }

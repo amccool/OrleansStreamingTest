@@ -9,12 +9,13 @@
       
       <!-- ConnectionString = "Server=.;Database=guts;User ID=guts;password=guts;"-->
 
-      <Provider Type="Orleans.SqlUtils.StorageProvider.SqlStorageProvider" Name="guts"
-                            ConnectionString = "Server=.;Initial catalog=guts;Integrated Security=SSPI;"
-            MapName="guts"
-             StateMapFactoryType="PubSubStoreSQLStorageProvider.GutsGrainStateMapFactory, PubSubStoreSQLStorageProvider"
-
-                />
+      <!--<Provider 
+        Type="Orleans.SqlUtils.StorageProvider.SqlStorageProvider" 
+        Name="guts"
+        ConnectionString = "Server=.;Initial catalog=guts;Integrated Security=SSPI;"
+        MapName="guts"
+        StateMapFactoryType="PubSubStoreSQLStorageProvider.GutsGrainStateMapFactory, PubSubStoreSQLStorageProvider"
+        />-->
 
       
 
