@@ -12,7 +12,6 @@
       <Provider Type="Orleans.SqlUtils.StorageProvider.SqlStorageProvider" Name="guts"
                             ConnectionString = "Server=.;Initial catalog=guts;Integrated Security=SSPI;"
             MapName="guts"
-            ShardCredentials="xxxxxxxxxxxxxxx"
              StateMapFactoryType="PubSubStoreSQLStorageProvider.GutsGrainStateMapFactory, PubSubStoreSQLStorageProvider"
 
                 />
@@ -35,7 +34,7 @@
     <Networking Address="localhost" Port="22222"/>
     <ProxyingGateway Address="localhost" Port="40000" />
     
-    <Tracing DefaultTraceLevel="Verbose3" TraceToConsole="true" TraceToFile="{0}-{1}.log" PropagateActivityId="false" BulkMessageLimit="1000">
+    <Tracing DefaultTraceLevel="Verbose3" TraceToConsole="true" TraceToFile="{2}-{0}-{1}.log" PropagateActivityId="false" BulkMessageLimit="1000">
        <TraceLevelOverride LogPrefix="Application" TraceLevel="Info" />
        <!--
        <TraceLevelOverride LogPrefix="Runtime.Dispatcher" TraceLevel="Verbose" />

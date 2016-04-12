@@ -46,7 +46,8 @@
       <HintPath>..\packages\Microsoft.Orleans.Core.1.1.2\lib\net451\Orleans.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="OrleansSQLUtils">
+    <Reference Include="OrleansSQLUtils, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\orleans\src\OrleansSQLUtils\bin\Debug\OrleansSQLUtils.dll</HintPath>
     </Reference>
     <Reference Include="System" />
