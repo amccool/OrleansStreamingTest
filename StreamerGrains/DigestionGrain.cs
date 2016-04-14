@@ -2,13 +2,15 @@
 using Orleans;
 using Orleans.Streams;
 using StreamingGrainInterfaces;
+using StreamingGrainInterfacesXXXXX;
+using StreamingGrainInterfacesYYYYY;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StreamerGrains
+namespace StreamerGrainsXXXX
 {
     public class DigestionGrain : Grain, IDigestionGrain
     {
@@ -34,5 +36,9 @@ namespace StreamerGrains
             //    });
         }
 
+        public Task ShitInMyMouth()
+        {
+            return TaskDone.Done;
+        }
     }
 }

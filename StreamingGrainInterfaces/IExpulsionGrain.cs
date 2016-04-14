@@ -6,13 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StreamingGrainInterfaces
+namespace StreamingGrainInterfacesYYYYY
 {
     public interface IExpulsionGrain : IGrainWithStringKey
     {
         Task LinkToDigestion(Guid streamId);
 
-        Task<List<Waste>> Dump();
+        Task<IEnumerable<Waste>> Dump();
     }
 
 

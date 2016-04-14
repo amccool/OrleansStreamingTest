@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 using StreamingGrainInterfaces;
 using DTOData;
 using Orleans.Streams;
+using StreamingGrainInterfacesYYYYY;
 
-namespace StreamerGrains
+namespace StreamerGrainsYYY
 {
     public class ExpulsionGrain : Grain, IExpulsionGrain
     {
-        private readonly List<Waste> outputs = new List<Waste>();
+        private readonly IList<Waste> outputs = new List<Waste>();
 
-        public Task<List<Waste>> Dump()
+        public Task<IEnumerable<Waste>> Dump()
         {
             //    var ww = Enumerable.Repeat(new Waste()
             //    {
@@ -30,7 +31,7 @@ namespace StreamerGrains
             //    return Task.FromResult(wwl);
 
 
-            return Task.FromResult(outputs);
+            return Task.FromResult(outputs.AsEnumerable());
         }
 
         public async Task LinkToDigestion(Guid streamId)

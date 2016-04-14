@@ -8,8 +8,10 @@ using System.Threading.Tasks;
 using DTOData;
 using Orleans.Streams;
 using Orleans.Providers;
+using StreamingGrainInterfacesZZZZZ;
+using StreamerGrains;
 
-namespace StreamerGrains
+namespace StreamerGrainsZZZ
 {
     [StorageProvider(ProviderName="guts")]
     public class IngestionGrain : Grain<GutState>, IIngestionGrain
@@ -37,8 +39,8 @@ namespace StreamerGrains
             }
             IAsyncStream<Food> foodStream = streamProvider.GetStream<Food>(this.strmId, this.GetPrimaryKeyString());
 
-             var digestivetract = GrainFactory.GetGrain<IDigestionGrain>(this.GetPrimaryKeyString());
-            await digestivetract.LinkToMouth(this.strmId);
+            // var digestivetract = GrainFactory.GetGrain<IDigestionGrain>(this.GetPrimaryKeyString());
+            //await digestivetract.LinkToMouth(this.strmId);
 
 
 

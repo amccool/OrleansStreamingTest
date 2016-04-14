@@ -5,13 +5,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace StreamingGrainInterfaces
+namespace StreamingGrainInterfacesXXXXX
 {
+
     public interface IDigestionGrain : IGrainWithStringKey
     {
         Task LinkToMouth(Guid streamId);
+
+        Task ShitInMyMouth();
     }
-
-
-
 }

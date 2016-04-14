@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Orleans.TestingHost;
 using System.Threading.Tasks;
-using StreamingGrainInterfaces;
+//using StreamingGrainInterfaces;
 using DTOData;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,87 +58,87 @@ namespace StreamerUnitTests
         }
 
 
-        [TestMethod]
-        public void SingleIngestionTest()
-        {
-            var mouthName = "TestMouth";
+        //[TestMethod]
+        //public void SingleIngestionTest()
+        //{
+        //    var mouthName = "TestMouth";
 
-            IIngestionGrain grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
-            grain.PrepareFoodRoute(Guid.NewGuid()).Wait();
+        //    IIngestionGrain grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
+        //    grain.PrepareFoodRoute(Guid.NewGuid()).Wait();
 
-            var fedtask  = grain.FeedMe(new DTOData.Food()
-            {
-                name = "carrot",
-                order = 0,
-                //type = DTOData.FoodPyramid.Vegatable
-            });
+        //    var fedtask  = grain.FeedMe(new DTOData.Food()
+        //    {
+        //        name = "carrot",
+        //        order = 0,
+        //        //type = DTOData.FoodPyramid.Vegatable
+        //    });
 
-            fedtask.Wait();
+        //    fedtask.Wait();
 
-            //Assert.IsNotNull(reply, "Grain replied with some message");
-            //string expected = string.Format("You said: '{0}', I say: Hello!", greeting);
-            //Assert.AreEqual(expected, reply, "Grain replied with expected message");
+        //    //Assert.IsNotNull(reply, "Grain replied with some message");
+        //    //string expected = string.Format("You said: '{0}', I say: Hello!", greeting);
+        //    //Assert.AreEqual(expected, reply, "Grain replied with expected message");
 
-        }
+        //}
 
-        [TestMethod]
-        public void GrainToGrainStreamCountTest()
-        {
-            var rnd = new Random();
-            var mouthName = "TestMouth" + rnd.Next().ToString();
+        //[TestMethod]
+        //public void GrainToGrainStreamCountTest()
+        //{
+        //    var rnd = new Random();
+        //    var mouthName = "TestMouth" + rnd.Next().ToString();
 
-            var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
-            grain.PrepareFoodRoute(Guid.NewGuid()).Wait();
+        //    var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
+        //    grain.PrepareFoodRoute(Guid.NewGuid()).Wait();
 
-            var feeds = new List<Task>();
-            for (int i = 0; i < numToLoop; i++)
-            {
-                feeds.Add(grain.FeedMe(new DTOData.Food()
-                {
-                    name = "carrot",
-                    order = i,
-                    //type = DTOData.FoodPyramid.Vegatable
-                }));
-            }
+        //    var feeds = new List<Task>();
+        //    for (int i = 0; i < numToLoop; i++)
+        //    {
+        //        feeds.Add(grain.FeedMe(new DTOData.Food()
+        //        {
+        //            name = "carrot",
+        //            order = i,
+        //            //type = DTOData.FoodPyramid.Vegatable
+        //        }));
+        //    }
 
-            var expul = GrainFactory.GetGrain<IExpulsionGrain>(mouthName);
-            Task<List<Waste>> taskwastes = expul.Dump();
-            Task.WhenAll(feeds).Wait();
-            taskwastes.Wait();
+        //    var expul = GrainFactory.GetGrain<IExpulsionGrain>(mouthName);
+        //    Task<IEnumerable<Waste>> taskwastes = expul.Dump();
+        //    Task.WhenAll(feeds).Wait();
+        //    taskwastes.Wait();
 
-            Assert.AreEqual<int>(numToLoop, taskwastes.Result.Count());
-        }
+        //    Assert.AreEqual<int>(numToLoop, taskwastes.Result.Count());
+        //}
 
 
 
-        [TestMethod]
-        public void GrainToGrainStreamCountAwaiterTest()
-        {
-            var rnd = new Random();
-            var mouthName = "TestMouth" + rnd.Next().ToString();
+        //[TestMethod]
+        //public void GrainToGrainStreamCountAwaiterTest()
+        //{
+        //    var rnd = new Random();
+        //    var mouthName = "TestMouth" + rnd.Next().ToString();
 
-            var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
-            grain.PrepareFoodRoute(Guid.NewGuid()).Wait();
+        //    var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
+        //    grain.PrepareFoodRoute(Guid.NewGuid()).Wait();
 
-            var expGrain = GrainFactory.GetGrain<IExpulsionGrain>(mouthName);
+        //    var expGrain = GrainFactory.GetGrain<IExpulsionGrain>(mouthName);
 
-            var dumpTask = expGrain.Dump();
+        //    var dumpTask = expGrain.Dump();
 
-            var feeds = new List<Task>();
-            for (int i = 0; i < numToLoop; i++)
-            {
-                feeds.Add(grain.FeedMe(new DTOData.Food()
-                {
-                    name = "carrot",
-                    order = i,
-                    //type = DTOData.FoodPyramid.Vegatable
-                }));
-            }
+        //    var feeds = new List<Task>();
+        //    for (int i = 0; i < numToLoop; i++)
+        //    {
+        //        feeds.Add(grain.FeedMe(new DTOData.Food()
+        //        {
+        //            name = "carrot",
+        //            order = i,
+        //            //type = DTOData.FoodPyramid.Vegatable
+        //        }));
+        //    }
 
-            Task.WhenAll(feeds).Wait();
+        //    Task.WhenAll(feeds).Wait();
 
-            Assert.AreEqual<int>(numToLoop, dumpTask.GetAwaiter().GetResult().Count());
-        }
+        //    Assert.AreEqual<int>(numToLoop, dumpTask.GetAwaiter().GetResult().Count());
+        //}
 
 
         //[TestMethod]
@@ -154,71 +154,71 @@ namespace StreamerUnitTests
         //}
 
 
-        [TestMethod]
-        public void ClientStreamFromGrainTest()
-        {
-            StreamSequenceToken tok;
-            IStreamProvider clientSMSProv = Orleans.GrainClient.GetStreamProvider(strmProvName);
+        //[TestMethod]
+        //public void ClientStreamFromGrainTest()
+        //{
+        //    StreamSequenceToken tok;
+        //    IStreamProvider clientSMSProv = Orleans.GrainClient.GetStreamProvider(strmProvName);
 
-            var rnd = new Random();
-            var mouthName = "TestMouth" + rnd.Next().ToString();
+        //    var rnd = new Random();
+        //    var mouthName = "TestMouth" + rnd.Next().ToString();
 
-            var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
-            var strmId = Guid.NewGuid();
-            grain.PrepareFoodRoute(strmId).Wait();
+        //    var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
+        //    var strmId = Guid.NewGuid();
+        //    grain.PrepareFoodRoute(strmId).Wait();
 
-            var foodstream = clientSMSProv.GetStream<Food>(strmId, mouthName);
+        //    var foodstream = clientSMSProv.GetStream<Food>(strmId, mouthName);
 
-            var foods = new List<Food>();
-            var subHandle = foodstream.SubscribeAsync(
-                (a,b) =>
-            {
-                foods.Add(a);
-                tok = b;
-                return TaskDone.Done;
-            });
+        //    var foods = new List<Food>();
+        //    var subHandle = foodstream.SubscribeAsync(
+        //        (a,b) =>
+        //    {
+        //        foods.Add(a);
+        //        tok = b;
+        //        return TaskDone.Done;
+        //    });
 
-            var feeds = new List<Task>();
-            for (int i = 0; i < numToLoop; i++)
-            {
-                feeds.Add(grain.FeedMe(new Food()
-                {
-                    name = "carrot",
-                    order = i,
-                    //type = FoodPyramid.Vegatable
-                }));
-            }
+        //    var feeds = new List<Task>();
+        //    for (int i = 0; i < numToLoop; i++)
+        //    {
+        //        feeds.Add(grain.FeedMe(new Food()
+        //        {
+        //            name = "carrot",
+        //            order = i,
+        //            //type = FoodPyramid.Vegatable
+        //        }));
+        //    }
 
 
-            subHandle.Wait();
-            Task.WhenAll(feeds).Wait();
+        //    subHandle.Wait();
+        //    Task.WhenAll(feeds).Wait();
 
-            Assert.AreEqual<int>(numToLoop, foods.Count());
+        //    Assert.AreEqual<int>(numToLoop, foods.Count());
 
-        }
+        //}
 
-        [TestMethod]
-        public void EnumerableGenerateFoodsTest()
-        {
-            var rnd = new Random();
-            var mouthName = "TestMouth" + rnd.Next().ToString();
-            var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
-            grain.PrepareFoodRoute(Guid.NewGuid()).Wait();
-            var looper = Enumerable.Range(0, numToLoop);
+    //    [TestMethod]
+    //    public void EnumerableGenerateFoodsTest()
+    //    {
+    //        var rnd = new Random();
+    //        var mouthName = "TestMouth" + rnd.Next().ToString();
+    //        var grain = GrainFactory.GetGrain<IIngestionGrain>(mouthName);
+    //        grain.PrepareFoodRoute(Guid.NewGuid()).Wait();
+    //        var looper = Enumerable.Range(0, numToLoop);
 
-            IEnumerable<Task> foodTasksQuery =
-    from x in looper
-    select grain.FeedMe(new Food()
-    {
-        name = "carrot",
-        order = x,
-        //type = FoodPyramid.Vegatable
-    });
+    //        IEnumerable<Task> foodTasksQuery =
+    //from x in looper
+    //select grain.FeedMe(new Food()
+    //{
+    //    name = "carrot",
+    //    order = x,
+    //    //type = FoodPyramid.Vegatable
+    //});
 
-            // Use ToArray to execute the query and start the download tasks.
-            Task[] foodTasks = foodTasksQuery.ToArray();
-            Task.WhenAll(foodTasks).Wait();
-        }
+    //        // Use ToArray to execute the query and start the download tasks.
+    //        Task[] foodTasks = foodTasksQuery.ToArray();
+    //        Task.WhenAll(foodTasks).Wait();
+    //    }
 
 
 

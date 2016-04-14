@@ -106,10 +106,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DTOData\DTOData.csproj">
-      <Project>{c758e96a-b948-4aa6-bbe8-f956b2e46b27}</Project>
-      <Name>DTOData</Name>
-    </ProjectReference>
     <ProjectReference Include="..\StreamerGrains\StreamerGrains.csproj">
       <Project>{037e6484-2f77-4d55-a60c-1fe7d6da3b05}</Project>
       <Name>StreamerGrains</Name>

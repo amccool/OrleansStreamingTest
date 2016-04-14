@@ -17,12 +17,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Digestion", "Digestion\Dige
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ESSourcer", "ESSourcer\ESSourcer.csproj", "{65BD41DE-AB89-4046-9691-C0BD9EB6786F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DTOData", "DTOData\DTOData.csproj", "{C758E96A-B948-4AA6-BBE8-F956B2E46B27}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{C416F9F3-C42A-4C92-AB42-7FF95CF7238B}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\nuget.config = .nuget\nuget.config
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleInterface", "SimpleInterface\SimpleInterface.csproj", "{3734388C-2876-4346-9F37-4C2473EEA513}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -58,10 +58,10 @@ Global
 		{65BD41DE-AB89-4046-9691-C0BD9EB6786F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65BD41DE-AB89-4046-9691-C0BD9EB6786F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{65BD41DE-AB89-4046-9691-C0BD9EB6786F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C758E96A-B948-4AA6-BBE8-F956B2E46B27}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C758E96A-B948-4AA6-BBE8-F956B2E46B27}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C758E96A-B948-4AA6-BBE8-F956B2E46B27}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C758E96A-B948-4AA6-BBE8-F956B2E46B27}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3734388C-2876-4346-9F37-4C2473EEA513}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3734388C-2876-4346-9F37-4C2473EEA513}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3734388C-2876-4346-9F37-4C2473EEA513}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3734388C-2876-4346-9F37-4C2473EEA513}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

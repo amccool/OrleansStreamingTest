@@ -10,12 +10,12 @@ namespace StreamerGrains
 {
     public class FoodObserver<T> : IAsyncObserver<T>
     {
-        private readonly DigestionGrain hostingGrain;
+        //private readonly DigestionGrain hostingGrain;
 
-        internal FoodObserver(DigestionGrain hostingGrain)
-        {
-            this.hostingGrain = hostingGrain;
-        }
+        //internal FoodObserver(DigestionGrain hostingGrain)
+        //{
+        //    this.hostingGrain = hostingGrain;
+        //}
 
         public Task OnCompletedAsync()
         {
