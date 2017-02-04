@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace StreamingGrainInterfaces
 {
-    interface IJunk : IGrainWithIntegerKey
+    public interface IJunk : IGrainWithIntegerKey
     {
         Task OOOOhhhhNooo();
     }

@@ -10,51 +10,94 @@ using Orleans.Streams;
 using Orleans;
 using System.Diagnostics;
 using System.IO;
+using Orleans.Runtime.Configuration;
+using Xunit;
+using Xunit.Abstractions;
 
 namespace StreamerUnitTests
 {
-    [DeploymentItem("OrleansConfigurationForTesting.xml")]
-    [DeploymentItem("ClientConfigurationForTesting.xml")]
-    [DeploymentItem("StreamerGrains.dll")]
-    [DeploymentItem("OrleansProviders.dll")]
-    [DeploymentItem("PubSubStoreSQLStorageProvider.dll")]
-    //this fixed the "deserializer" problem
-    [DeploymentItem("DTOData.dll")]
+    //[DeploymentItem("OrleansConfigurationForTesting.xml")]
+    //[DeploymentItem("ClientConfigurationForTesting.xml")]
+    //[DeploymentItem("StreamerGrains.dll")]
+    //[DeploymentItem("OrleansProviders.dll")]
+    //[DeploymentItem("PubSubStoreSQLStorageProvider.dll")]
+    ////this fixed the "deserializer" problem
+    //[DeploymentItem("DTOData.dll")]
 
-    //all the supporting assemblies
-    [DeploymentItem("Microsoft.Azure.SqlDatabase.ElasticScale.Client.dll")]
+    ////all the supporting assemblies
+    //[DeploymentItem("Microsoft.Azure.SqlDatabase.ElasticScale.Client.dll")]
 
 
 
-    [TestClass]
-    public class UnitTest1 : TestingSiloHost
+    public class UnitTest1 : IClassFixture<UnitTest1.Fixture>
     {
-        private const string strmProvName = "SMSProvider";
-        private const int numToLoop = 70;
-        private readonly Guid streamId = Guid.NewGuid(); 
 
-        public UnitTest1()
-            : base(new TestingSiloOptions
-            {
-                StartFreshOrleans = true,
-                SiloConfigFile = new FileInfo("OrleansConfigurationForTesting.xml"),
-            },
-            new TestingClientOptions()
-            {
-                ClientConfigFile = new FileInfo("ClientConfigurationForTesting.xml")
-            })
+        private readonly Fixture _fixture;
+        private readonly ITestOutputHelper output;
+
+        public class Fixture : BaseTestClusterFixture
         {
+            protected override TestCluster CreateTestCluster()
+            {
+                TimeSpan _timeout = Debugger.IsAttached ? TimeSpan.FromMinutes(5) : TimeSpan.FromSeconds(10);
+
+                //TODO: the RGS config is still all static fields so we have to limit the test cluster to 1 node for now
+                var options = new TestClusterOptions(1);
+                //WARN: a better test would be to use the default () for 2 silos!
+
+                options.ClusterConfiguration.AddMemoryStorageProvider("Facility");
+                options.ClusterConfiguration.AddMemoryStorageProvider("NopRefresher");
+                options.ClusterConfiguration.AddMemoryStorageProvider("PubSubStore");
+                options.ClusterConfiguration.AddMemoryStorageProvider("ACE");
+                options.ClusterConfiguration.AddMemoryStorageProvider("Annunciation");
+                options.ClusterConfiguration.AddMemoryStorageProvider("Tag");
+                options.ClusterConfiguration.AddMemoryStorageProvider("CancelRegistration");
+                options.ClusterConfiguration.AddMemoryStorageProvider("ServiceSetByPCC");
+
+                //var connectionString = @"Data Source=.;Database=OrleansStorage;Integrated Security=True;";
+                //options.ClusterConfiguration.AddSimpleSQLStorageProvider("Facility", connectionString, "true");
+                //options.ClusterConfiguration.AddSimpleSQLStorageProvider("NopRefresher", connectionString, "true");
+                //options.ClusterConfiguration.AddSimpleSQLStorageProvider("PubSubStore", connectionString, "true");
+                //options.ClusterConfiguration.AddSimpleSQLStorageProvider("ACE", connectionString, "true");
+                //options.ClusterConfiguration.AddSimpleSQLStorageProvider("Annunciation", connectionString, "true");
+                //options.ClusterConfiguration.AddSimpleSQLStorageProvider("Tag", connectionString, "true");
+                //options.ClusterConfiguration.AddSimpleSQLStorageProvider("CancelRegistration", connectionString, "true");
+                //options.ClusterConfiguration.AddSimpleSQLStorageProvider("ServiceSetByPCC", connectionString, "true");
+
+                options.ClusterConfiguration.AddSimpleMessageStreamProvider(BrcStreamNamespaceHelpers.StreamProvider);
+                options.ClusterConfiguration.AddSimpleMessageStreamProvider(
+                    R5ClientStreamNamespaceHelpers.StreamProvider);
+                options.ClusterConfiguration.AddSimpleMessageStreamProvider("PHONEMOCKOUTPUT");
+
+                options.ClusterConfiguration.Globals.ClientDropTimeout = _timeout;
+                options.ClusterConfiguration.ApplyToAllNodes(o => o.DefaultTraceLevel = Orleans.Runtime.Severity.Warning);
+
+                options.ClientConfiguration.AddSimpleMessageStreamProvider(BrcStreamNamespaceHelpers.StreamProvider);
+                options.ClientConfiguration.AddSimpleMessageStreamProvider(R5ClientStreamNamespaceHelpers.StreamProvider);
+                options.ClientConfiguration.AddSimpleMessageStreamProvider("PHONEMOCKOUTPUT");
+
+                options.ClientConfiguration.DefaultTraceLevel = Orleans.Runtime.Severity.Warning;
+                options.ClientConfiguration.ClientDropTimeout = _timeout;
+
+                //dependency injection for the Facility Grain
+                //even if we dont actually ask for a facility grain, the implicit stream subscription will start it
+                options.ClusterConfiguration.UseStartupType<TestStartup>();
+
+                return new TestCluster(options);
+            }
         }
 
 
 
-        [ClassCleanup]
-        public static void ClassCleanup()
+        private const string strmProvName = "SMSProvider";
+        private const int numToLoop = 70;
+        private readonly Guid streamId = Guid.NewGuid(); 
+
+
+        public UnitTest1(UnitTest1.Fixture fixture, ITestOutputHelper output)
         {
-            // Optional. 
-            // By default, the next test class which uses TestignSiloHost will
-            // cause a fresh Orleans silo environment to be created.
-            StopAllSilos();
+            this.output = output;
+            this._fixture = fixture;
         }
 
 
