@@ -46,13 +46,13 @@ namespace StreamerUnitTests
                 //WARN: a better test would be to use the default () for 2 silos!
 
                 options.ClusterConfiguration.AddMemoryStorageProvider("Facility");
-                options.ClusterConfiguration.AddMemoryStorageProvider("NopRefresher");
-                options.ClusterConfiguration.AddMemoryStorageProvider("PubSubStore");
-                options.ClusterConfiguration.AddMemoryStorageProvider("ACE");
-                options.ClusterConfiguration.AddMemoryStorageProvider("Annunciation");
-                options.ClusterConfiguration.AddMemoryStorageProvider("Tag");
-                options.ClusterConfiguration.AddMemoryStorageProvider("CancelRegistration");
-                options.ClusterConfiguration.AddMemoryStorageProvider("ServiceSetByPCC");
+                //options.ClusterConfiguration.AddMemoryStorageProvider("NopRefresher");
+                //options.ClusterConfiguration.AddMemoryStorageProvider("PubSubStore");
+                //options.ClusterConfiguration.AddMemoryStorageProvider("ACE");
+                //options.ClusterConfiguration.AddMemoryStorageProvider("Annunciation");
+                //options.ClusterConfiguration.AddMemoryStorageProvider("Tag");
+                //options.ClusterConfiguration.AddMemoryStorageProvider("CancelRegistration");
+                //options.ClusterConfiguration.AddMemoryStorageProvider("ServiceSetByPCC");
 
                 //var connectionString = @"Data Source=.;Database=OrleansStorage;Integrated Security=True;";
                 //options.ClusterConfiguration.AddSimpleSQLStorageProvider("Facility", connectionString, "true");
@@ -64,24 +64,23 @@ namespace StreamerUnitTests
                 //options.ClusterConfiguration.AddSimpleSQLStorageProvider("CancelRegistration", connectionString, "true");
                 //options.ClusterConfiguration.AddSimpleSQLStorageProvider("ServiceSetByPCC", connectionString, "true");
 
-                options.ClusterConfiguration.AddSimpleMessageStreamProvider(BrcStreamNamespaceHelpers.StreamProvider);
-                options.ClusterConfiguration.AddSimpleMessageStreamProvider(
-                    R5ClientStreamNamespaceHelpers.StreamProvider);
-                options.ClusterConfiguration.AddSimpleMessageStreamProvider("PHONEMOCKOUTPUT");
+                //options.ClusterConfiguration.AddSimpleMessageStreamProvider(BrcStreamNamespaceHelpers.StreamProvider);
+                //options.ClusterConfiguration.AddSimpleMessageStreamProvider(R5ClientStreamNamespaceHelpers.StreamProvider);
+                //options.ClusterConfiguration.AddSimpleMessageStreamProvider("PHONEMOCKOUTPUT");
 
                 options.ClusterConfiguration.Globals.ClientDropTimeout = _timeout;
                 options.ClusterConfiguration.ApplyToAllNodes(o => o.DefaultTraceLevel = Orleans.Runtime.Severity.Warning);
 
-                options.ClientConfiguration.AddSimpleMessageStreamProvider(BrcStreamNamespaceHelpers.StreamProvider);
-                options.ClientConfiguration.AddSimpleMessageStreamProvider(R5ClientStreamNamespaceHelpers.StreamProvider);
-                options.ClientConfiguration.AddSimpleMessageStreamProvider("PHONEMOCKOUTPUT");
+                //options.ClientConfiguration.AddSimpleMessageStreamProvider(BrcStreamNamespaceHelpers.StreamProvider);
+                //options.ClientConfiguration.AddSimpleMessageStreamProvider(R5ClientStreamNamespaceHelpers.StreamProvider);
+                //options.ClientConfiguration.AddSimpleMessageStreamProvider("PHONEMOCKOUTPUT");
 
                 options.ClientConfiguration.DefaultTraceLevel = Orleans.Runtime.Severity.Warning;
                 options.ClientConfiguration.ClientDropTimeout = _timeout;
 
                 //dependency injection for the Facility Grain
                 //even if we dont actually ask for a facility grain, the implicit stream subscription will start it
-                options.ClusterConfiguration.UseStartupType<TestStartup>();
+                //options.ClusterConfiguration.UseStartupType<TestStartup>();
 
                 return new TestCluster(options);
             }

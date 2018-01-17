@@ -13,13 +13,13 @@ namespace StreamerUnitTests
     {
         static BaseTestClusterFixture()
         {
-            TestClusterOptions.DefaultTraceToConsole = false;
+            //TestClusterOptions.DefaultTraceToConsole = false;
         }
 
         protected BaseTestClusterFixture()
         {
             GrainClient.Uninitialize();
-            SerializationManager.InitializeForTesting();
+            //SerializationManager.InitializeForTesting();
             var testCluster = CreateTestCluster();
             if (testCluster.Primary == null)
             {
